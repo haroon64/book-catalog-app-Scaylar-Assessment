@@ -1,41 +1,44 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+.pnp.js
 
-# testing
-/coverage
-
-# next.js
+# Next.js Build Output
 /.next/
 /out/
+/dist/
 
-# production
+# Production/Deployment
 /build
+/coverage
+/public/static
 
-# misc
-.DS_Store
-*.pem
-
-# debug
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+lerna-debug.log*
+.npm/
+.eslintcache
+.vitepress/cache
+.nuxt/ # Nuxt.js (often used with Vue, but good to include if you might use similar technologies)
 
-# env files (can opt-in for committing if needed)
-.env*
+# Local Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# vercel
-.vercel
+# Local Editor/OS Files
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+Thumbs.db # Windows
+.vscode/ # VS Code settings
+*.sublime-workspace # Sublime Text
+*.idea # JetBrains IDEs (WebStorm, etc.)
+
+# TypeScript/Linting/Testing
+next-env.d.ts # Next.js TypeScript declarations (often ignored if generated)
+
+# Packages
+*.tgz
