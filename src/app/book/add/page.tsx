@@ -2,13 +2,35 @@
 
 import React, { useState } from 'react';
 
+const genreOptions = [
+  "Fiction",
+  "Mystery",
+  "Biography",
+  "Fantasy",
+  "Science Fiction",
+  "Romance",
+  "History",
+  "Self-Help",
+  "Horror",
+  "Classic",
+];
+
+const ratingOptions = Array.from({ length: 9 }, (_, i) => (i * 0.5 + 1).toFixed(1)); 
+// 1 → 1.5 → 2 → ... → 5
+
+// Generate years (1950 → current year)
+const years = Array.from({ length: new Date().getFullYear() - 1949 }, (_, i) => 1950 + i).reverse();
+
+
 function AddBookPage() {
   const [formData, setFormData] = useState({
-    title: '',
-    author: '',
-    genre: '',
+    book_name: "",
+    author: "",
+    book_description: "",
+    publication_year: "",
+    genre: "",
+    rating: "",
   });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -21,29 +43,52 @@ function AddBookPage() {
     e.preventDefault();
     
     // Basic validation
-    if (!formData.title || !formData.author || !formData.genre) {
+    if (!formData.book_name || !formData.author  || !formData.publication_year  || !formData.rating || !formData.genre) {
       alert('Please fill in all fields');
       return;
     }
 
-    console.log('Book Data:', formData);
+    // console.log('Book Data:', formData);
     
     // Add your API call here
     // Example:
-    // const response = await fetch('/api/books', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData)
-    // });
-    
+   
+  try {
+    console.log('Submitting book1:', formData);
+
+    const response = await fetch('http://localhost:3000/api/books', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    console.log('Fetch called');
+    console.log('Response status:', response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to add book");
+    }
+
+    const data = await response.json();
+    console.log("Book created:", data);
+
     alert('Book added successfully!');
+
     
     // Reset form
     setFormData({
-      title: '',
+      book_name: '',
       author: '',
+      book_description: "",
+      publication_year: "",
       genre: '',
+      rating: "",
     });
+      window.location.href = '/book';
+      } catch (error: any) {
+    console.error("Error adding book:", error);
+    alert(` Error: ${error.message}`);
+  }
   };
 
   return (
@@ -62,27 +107,25 @@ function AddBookPage() {
             </div>
           </div>
         </div>
-        
 
-        {/* Form Card */}
         <div className="bg-white mt-7 rounded-xl shadow-lg p-8">
    
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Add New Book</h1>
           <p className="text-gray-600">Fill in the details to add a book to your collection</p>
         </div>
-            {/* Title Input */}
+            {/* book_name Input */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Book Title *
+                Title *
               </label>
               <input
                 type="text"
-                name="title"
-                value={formData.title}
+                name="book_name"
+                value={formData.book_name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter book title"
+                className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder="Enter book book_name"
                 required
               />
             </div>
@@ -97,7 +140,7 @@ function AddBookPage() {
                 name="author"
                 value={formData.author}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="Enter author name"
                 required
               />
@@ -106,17 +149,76 @@ function AddBookPage() {
             {/* Genre Input */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Genre *
+               Book Description *
               </label>
               <input
                 type="text"
                 name="genre"
                 value={formData.genre}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="e.g., Fiction, Mystery, Biography"
+                className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder="enter 1 line description about the book"
                 required
               />
+            </div>
+               <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Publication Year *
+              </label>
+             <select
+          name="publication_year"
+          value={formData.publication_year}
+          onChange={handleChange}
+          className="w-full text-black mb-4 px-4 py-3 border rounded-lg"
+          required
+        >
+          <option value="">Select year</option>
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+
+            </div>
+               <div>
+              <label className="block  text-black text-sm font-semibold  mb-2">
+                Genre *
+              </label>
+                <select
+          name="genre"
+          value={formData.genre}
+          onChange={handleChange}
+          className="w-full mb-4 text-black px-4 py-3 border rounded-lg"
+          required
+        >
+          <option value="">Select Genre</option>
+          {genreOptions.map((g) => (
+            <option key={g} value={g}>
+              {g}
+            </option>
+          ))}
+        </select>
+
+            </div>
+             <div>
+              <label className="block text-black text-sm font-semibold mb-2">
+                rating *
+              </label>
+             <select
+          name="rating"
+          value={formData.rating}
+          onChange={handleChange}
+          className="w-full text-black mb-6 px-4 py-3 border rounded-lg"
+        >
+          <option value="">Select Rating</option>
+          {ratingOptions.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+        </select>
+
             </div>
 
             {/* Buttons */}

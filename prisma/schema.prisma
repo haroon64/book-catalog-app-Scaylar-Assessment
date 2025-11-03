@@ -11,6 +11,8 @@ model User {
   id        Int       @id @default(autoincrement())
   name      String?
   email     String    @unique
+  image     String?
+  emailVerified  DateTime?
   password  String?
   accounts  Account[]
   sessions  Session[]

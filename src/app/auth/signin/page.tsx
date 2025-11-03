@@ -1,19 +1,44 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 
 function SignInPage() {
+  const router = useRouter();  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
-    // Add your sign in logic here
+    setError("");
+
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (res?.error) {
+      setError("Invalid email or password");
+      return;
+    }
+
+    router.push("/book"); // redirect after login
   };
+
+  const handleGoogleLogin = () => {
+    signIn("google", { callbackUrl: "/book" });
+  };
+
+ const handleSignup =async () => {
+    router.push("/auth/signup");
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center p-4">
@@ -28,6 +53,10 @@ function SignInPage() {
           <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
           <p className="text-gray-600 mt-2">Sign in to your account</p>
         </div>
+        
+        {error && (
+          <p className="text-red-600 text-center mb-3">{error}</p>
+        )}
 
         {/* Form */}
         <div className="space-y-6">
@@ -115,6 +144,7 @@ function SignInPage() {
           {/* Google Button */}
           <button
             type="button"
+            onClick={handleGoogleLogin}
             className="w-full bg-white border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition flex items-center justify-center space-x-2"
           >
             <svg className="w-5 h-5 " viewBox="0 0 24 24">
@@ -126,7 +156,7 @@ function SignInPage() {
           {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600">
             Don't have an account?{' '}
-            <a href="#" className="text-indigo-600 font-semibold hover:text-indigo-500">
+            <a href="#" onClick={handleSignup} className="text-indigo-600 font-semibold hover:text-indigo-500">
               Sign up
             </a>
           </p>
