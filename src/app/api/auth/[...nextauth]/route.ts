@@ -15,44 +15,32 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-
+      credentials: { email: { label: "Email", type: "text" }, password: { label: "Password", type: "password" } },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password required");
-        }
+        if (!credentials?.email || !credentials?.password) throw new Error("Email and password required");
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        });
-
-        if (!user || !user.password) {
-          throw new Error("User not found");
-        }
+        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+        if (!user || !user.password) throw new Error("User not found");
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) throw new Error("Invalid password");
 
         return {
-          id: user.id,
+          id: String(user.id),
           name: user.name,
-          email: user.email
+          email: user.email ?? ""
         };
       }
     }),
 
-    GoogleProvider({
-      clientId,
-      clientSecret
-    })
+    GoogleProvider({ clientId, clientSecret })
   ],
 
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
+        if (!user.email) throw new Error("Google account has no email");
+
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email },
           include: { accounts: true }
@@ -74,13 +62,11 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    // ✅ Add user.id to JWT token
     async jwt({ token, user }) {
       if (user) token.id = user.id;
       return token;
     },
 
-    // ✅ Add user.id to session
     async session({ session, token }) {
       if (session.user) session.user.id = token.id as string;
       return session;

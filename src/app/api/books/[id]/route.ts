@@ -33,9 +33,10 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
       return NextResponse.json({ message: "Book not found" }, { status: 404 });
     }
 
-    if (book.userId !== session.user.id) {
+    if (book.userId !== Number(session.user.id)) {
       return NextResponse.json({ message: "Not allowed" }, { status: 403 });
     }
+
 
     await prisma.books.delete({
       where: { id: bookId },

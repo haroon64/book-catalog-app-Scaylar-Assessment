@@ -39,9 +39,9 @@ function SignupPage() {
     }
     console.log("Submitting:", { name, email, password });
 
-    setErrors({}); 
 
-    const res = await fetch("{}/api/signup", {
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
