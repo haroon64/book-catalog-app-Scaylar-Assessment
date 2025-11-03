@@ -44,7 +44,7 @@ const BookCard: React.FC<BookCardProps> = ({ searchTerm, filterGenre, books }) =
 
     try {
       console.log("Deleting book with ID:", id);
-      const res = await fetch(`/api/books/${id}`, { method: "DELETE" });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books/${id}`, { method: "DELETE" });
       console.log("Delete response:", res);
       
       if (!res.ok) throw new Error("Failed to delete");

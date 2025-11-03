@@ -35,7 +35,7 @@ const BookPage = () => {
         setLoading(true);
         setError("");
 
-        const response = await fetch("http://localhost:3000/api/books");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books`);
         if (!response.ok) throw new Error("Failed to fetch books");
 
         const data = await response.json();

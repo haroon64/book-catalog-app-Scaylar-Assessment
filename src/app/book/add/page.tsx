@@ -56,7 +56,7 @@ function AddBookPage() {
   try {
     console.log('Submitting book1:', formData);
 
-    const response = await fetch('http://localhost:3000/api/books', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
