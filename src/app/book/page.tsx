@@ -17,7 +17,16 @@ const BookPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  const genres = ["all", "Fiction", "Fantasy", "Sci-Fi", "Romance", "History"];
+  const genres = ["Fiction",
+  "Mystery",
+  "Biography",
+  "Fantasy",
+  "Science Fiction",
+  "Romance",
+  "History",
+  "Self-Help",
+  "Horror",
+  "Classic",];
 
   
   useEffect(() => {

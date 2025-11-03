@@ -153,8 +153,8 @@ function AddBookPage() {
               </label>
               <input
                 type="text"
-                name="genre"
-                value={formData.genre}
+                name="book_description"
+                value={formData.book_description}
                 onChange={handleChange}
                 className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="enter 1 line description about the book"

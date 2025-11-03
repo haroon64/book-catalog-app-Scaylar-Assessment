@@ -72,34 +72,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to add book" }, { status: 500 });
   }
 }
-
-
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const bookId = parseInt(params.id);
-
-    // ✅ Only allow deleting books owned by logged-in user
-    const book = await prisma.books.findUnique({
-      where: { id: bookId },
-    });
-
-    if (!book) return NextResponse.json({ error: "Book not found" }, { status: 404 });
-
-    if (book.userId !== session.user.id) {
-      return NextResponse.json({ error: "Not allowed" }, { status: 403 });
-    }
-
-    await prisma.books.delete({
-      where: { id: bookId },
-    });
-
-    return NextResponse.json({ message: "Book deleted successfully" });
-  } catch (error) {
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
-}
