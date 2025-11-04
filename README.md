@@ -73,7 +73,7 @@ npm install
   GOOGLE_CLIENT_ID="969864524820-jbsieu66rn3nq08gr28k1tjnd75c4uvh.apps.googleusercontent.com"
   GOOGLE_CLIENT_SECRET="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"
   NEXT_PUBLIC_BASE_URL=http://localhost:3000
-
+  NODE_ENV="production"
 5. Run the development server
    ```bash
    npm run dev
