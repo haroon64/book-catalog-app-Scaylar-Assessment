@@ -1,4 +1,6 @@
 "use client";
+import { FaRegUserCircle } from "react-icons/fa";
+
 
 import React, { useState,useEffect } from 'react';
 import { signOut } from "next-auth/react";
@@ -7,6 +9,7 @@ import { useSession } from "next-auth/react";
 
 
 function Header() {
+    const { data: session } = useSession();
 
  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -55,9 +58,23 @@ function Header() {
               BookCatalog
             </span>
           </div>
+          <FaRegUserCircle />
+
 
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center space-x-3">
+            <div className="flex items-center gap-2">
+                    <FaRegUserCircle className="text-2xl text-gray-700" />
+                    {session?.user?.name ? (
+                        <span className="font-medium text-gray-700">
+                        {session.user.name}
+                        </span>
+                    ) : (
+                        <span className="text-gray-500 text-sm">Guest</span>
+                    )}
+            </div>
+
+
             {/* Add Book Button */}
             <button
               onClick={handleAddBook}
@@ -78,6 +95,7 @@ function Header() {
               </svg>
               <span>Add Book</span>
             </button>
+            
 
             {/* Logout Button */}
             <button
@@ -124,15 +142,17 @@ function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200 space-y-2 animate-slideDown">
             {/* Home Button */}
-            <button
-              onClick={handleHome}
-              className="w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-left"
-            >
-              <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              <span className="font-medium">Home</span>
-            </button>
+          
+             <div className="flex items-center gap-2">
+                    <FaRegUserCircle className="text-2xl text-gray-700" />
+                    {session?.user?.name ? (
+                        <span className="font-medium text-gray-700">
+                        {session.user.name}
+                        </span>
+                    ) : (
+                        <span className="text-gray-500 text-sm">Guest</span>
+                    )}
+            </div>
 
             {/* Add Book Button */}
             <button

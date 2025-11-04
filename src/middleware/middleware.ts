@@ -1,44 +1,41 @@
-import { NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  const token = await getToken({ req });
+export const config = {
+  matcher: '/api/:path*', // Apply only to API routes
+};
 
-  if (req.method === "OPTIONS") {
-    return new NextResponse(null, {
+export default function middleware(request: NextRequest) {
+  const origin = request.headers.get('origin');
+  
+  // Define allowed origins dynamically
+  const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? ['https://app.example.com', 'https://admin.example.com']
+    : ['http://localhost:3000', 'http://localhost:3001'];
+  
+  const isAllowedOrigin = origin && allowedOrigins.includes(origin);
+  
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
       status: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        'Access-Control-Allow-Origin': isAllowedOrigin ? origin : 'null',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Max-Age': '86400',
       },
     });
   }
-
-
-  const publicRoutes = ["/api/signup", "/api/auth", "/login", "/register"];
-  const isPublicRoute = publicRoutes.some((path) => pathname.startsWith(path));
-
-  if (isPublicRoute) {
-    return NextResponse.next();
+  
+  // Continue with the request and add CORS headers to the response
+  const response = NextResponse.next();
+  
+  if (isAllowedOrigin) {
+    response.headers.set('Access-Control-Allow-Origin', origin);
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
   }
-
-  if (pathname.startsWith("/book")) {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-  }
-
-  const res = NextResponse.next();
-  res.headers.set("Access-Control-Allow-Origin", "*");
-  res.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  return res;
+  
+  return response;
 }
-
-
-export const config = {
-  matcher: ["/book/:path*", "/api/:path*"],
-};
