@@ -18,7 +18,7 @@ function SignupPage() {
 });
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Signup submit clicked");
+    
 
     let tempErrors: any = {};
 
@@ -28,16 +28,16 @@ function SignupPage() {
     if (!confirmPassword.trim()) tempErrors.confirmPassword = "Confirm Password is required";
     if (password && confirmPassword && password !== confirmPassword)
         tempErrors.confirmPassword = "Passwords do not match";
-    console.log("Temp Errors:", tempErrors);
+  
 
     if (Object.keys(tempErrors).length > 0) {
         
         setErrors(tempErrors);
-          console.log("errors set:", errors);
+    
         return;
       
     }
-    console.log("Submitting:", { name, email, password });
+  
 
 
 
@@ -63,7 +63,7 @@ function SignupPage() {
     
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        {/* Header */}
+  
         
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">

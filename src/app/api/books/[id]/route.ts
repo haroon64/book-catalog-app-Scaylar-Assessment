@@ -17,7 +17,7 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
 
     const bookId = Number(id);
 
-    console.log("Book ID to delete:", bookId);
+    
 
     if (!bookId || Number.isNaN(bookId)) {
       return NextResponse.json({ message: "Invalid Book ID" }, { status: 400 });
@@ -27,7 +27,7 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
       where: { id: bookId }
     });
 
-    console.log("Book found for deletion:", book);
+ 
 
     if (!book) {
       return NextResponse.json({ message: "Book not found" }, { status: 404 });
@@ -45,7 +45,7 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
     return NextResponse.json({ message: "Book deleted successfully" });
 
   } catch (error) {
-    console.error("Delete error:", error);
+    
     return NextResponse.json({ message: "Server Error" }, { status: 500 });
   }
 }

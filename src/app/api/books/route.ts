@@ -6,7 +6,7 @@ import { authOptions } from "../auth/[...nextauth]/route";  // adjust path if ne
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    console.log("Session in Book GET:", session);
+   
 
     if (!session?.user?.id) {
        
@@ -14,14 +14,14 @@ export async function GET() {
     }
 
     const books = await prisma.books.findMany({
-      where: { userId: Number(session.user.id) }, // ✅ fetch only logged-in user's books
+      where: { userId: Number(session.user.id) }, 
       orderBy: { id: "desc" },
       include: { user: true }
     });
 
     return NextResponse.json(books);
   } catch (error) {
-    console.error("Error fetching books:", error);
+
     return NextResponse.json({ error: "Failed to fetch books" }, { status: 500 });
   }
 }
@@ -29,13 +29,13 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    console.log("Session in Book POST:", session);
+    
 
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    console.log("User Email from Session:", session.user.email);
+   
 
     const body = await req.json();
     const { book_name, author, book_description, publication_year, rating, genre } = body;
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // ✅ Get logged-in user
+   
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
     });
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
     return NextResponse.json(newBook, { status: 201 });
 
   } catch (error) {
-    console.log("Book POST Error:", error);
+   
     return NextResponse.json({ error: "Failed to add book" }, { status: 500 });
   }
 }

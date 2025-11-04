@@ -9,6 +9,7 @@ import { FaRegHeart } from "react-icons/fa";
 import BookCard from "../components/bookCard";
 import NoBooks from "../components/NoBooks";
 import StatBox from "../components/StatBox";
+import { useRouter } from "next/navigation";
 
 const BookPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +17,7 @@ const BookPage = () => {
   const [books, setBooks] = useState<any[]>([{}]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const genres = ["Fiction",
   "Mystery",
@@ -36,10 +38,15 @@ const BookPage = () => {
         setError("");
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books`);
+     
+        if (response.status === 401) {
+           alert("unauthorized! Please sign in.");   
+             router.replace("/auth/signin"); }
+
         if (!response.ok) throw new Error("Failed to fetch books");
 
         const data = await response.json();
-        console.log("Fetched books:", data);
+     
         setBooks(data);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
@@ -51,7 +58,6 @@ const BookPage = () => {
     fetchBooks();
   }, []);
 
-  // ✅ Filter + Search Logic
   const filteredBooks = useMemo(() => {
   if (!Array.isArray(books)) return [];
 
@@ -84,8 +90,6 @@ const BookPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-
-     
       <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <h1 className="text-4xl font-bold">Book Catalog App</h1>
@@ -103,7 +107,6 @@ const BookPage = () => {
         </div>
       </section>
 
-      {/* ✅ Search + Filters */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="bg-white p-6 shadow-md rounded-lg mb-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -116,7 +119,6 @@ const BookPage = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
 
-            {/* Genre Filter */}
             <select
               value={filterGenre}
               onChange={(e) => setFilterGenre(e.target.value)}
@@ -131,7 +133,6 @@ const BookPage = () => {
           </div>
         </div>
 
-        {/* ✅ Error / Loading / Books */}
         {loading && <p className="text-center text-lg">Loading books...</p>}
         {error && <p className="text-center text-red-500 text-lg">{error}</p>}
 

@@ -22,7 +22,7 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ searchTerm, filterGenre, books }) => {
   const [localBooks, setLocalBooks] = useState<Book[]>(books);
-  console.log("Books in BookCard:", books);
+
 
   // Memoized Filter Logic (with safe checks)
   const filteredBooks = useMemo(() => {
@@ -38,28 +38,25 @@ const BookCard: React.FC<BookCardProps> = ({ searchTerm, filterGenre, books }) =
     });
   }, [searchTerm, filterGenre, localBooks]);
 
-  // Delete book
+
   const handleDelete = async (id: number, name: string) => {
     if (!confirm(`Delete "${name}"?`)) return;
 
     try {
-      console.log("Deleting book with ID:", id);
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books/${id}`, { method: "DELETE" });
-      console.log("Delete response:", res);
       
       if (!res.ok) throw new Error("Failed to delete");
 
       setLocalBooks((prev) => prev.filter((b) => b.id !== id));
       alert("Book deleted successfully!");
     } catch (error) {
-      console.error(error);
       alert("Error deleting book");
     }
   };
 
   // View details
   const handleView = (book: Book) => {
-    console.log("Viewing book:", book);
+   
     // Navigate to detail page
     // window.location.href = `/book/${book.id}`;
   };

@@ -28,7 +28,7 @@ function SignInPage() {
       return;
     }
 
-    router.push("/book"); // redirect after login
+    router.push("/book"); 
   };
 
   const handleGoogleLogin = () => {
@@ -43,7 +43,7 @@ function SignInPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        {/* Header */}
+      
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,9 +58,8 @@ function SignInPage() {
           <p className="text-red-600 text-center mb-3">{error}</p>
         )}
 
-        {/* Form */}
         <div className="space-y-6">
-          {/* Email Input */}
+
           <div>
             <label className="block text-black font-semibold text-gray-700 mb-2">
               Email
@@ -75,7 +74,6 @@ function SignInPage() {
             />
           </div>
 
-          {/* Password Input */}
           <div>
             <label className="block text-black font-semibold text-gray-700 mb-2">
               Password
@@ -108,7 +106,6 @@ function SignInPage() {
             </div>
           </div>
 
-          {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input
@@ -122,7 +119,7 @@ function SignInPage() {
             </a>
           </div>
 
-          {/* Submit Button */}
+
           <button
             type="button"
             onClick={handleSubmit}
@@ -141,7 +138,6 @@ function SignInPage() {
             </div>
           </div>
 
-          {/* Google Button */}
           <button
             type="button"
             onClick={handleGoogleLogin}
@@ -153,7 +149,6 @@ function SignInPage() {
             <span>Google</span>
           </button>
 
-          {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600">
             Don't have an account?{' '}
             <a href="#" onClick={handleSignup} className="text-indigo-600 font-semibold hover:text-indigo-500">

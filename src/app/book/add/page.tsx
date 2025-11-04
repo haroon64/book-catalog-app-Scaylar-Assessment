@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
-
+import React, { useState,useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 const genreOptions = [
   "Fiction",
   "Mystery",
@@ -16,13 +17,13 @@ const genreOptions = [
 ];
 
 const ratingOptions = Array.from({ length: 9 }, (_, i) => (i * 0.5 + 1).toFixed(1)); 
-// 1 → 1.5 → 2 → ... → 5
 
-// Generate years (1950 → current year)
 const years = Array.from({ length: new Date().getFullYear() - 1949 }, (_, i) => 1950 + i).reverse();
 
 
 function AddBookPage() {
+   const {  status } = useSession();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     book_name: "",
     author: "",
@@ -31,6 +32,13 @@ function AddBookPage() {
     genre: "",
     rating: "",
   });
+   
+     useEffect(() => {
+      if (status === "unauthenticated") {
+        alert("unauthorized! Please sign in.");
+        router.replace("/auth/signin"); 
+      }
+    }, [status, router]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -42,27 +50,21 @@ function AddBookPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
+ 
     if (!formData.book_name || !formData.author  || !formData.publication_year  || !formData.rating || !formData.genre) {
       alert('Please fill in all fields');
       return;
     }
 
-    // console.log('Book Data:', formData);
-    
-    // Add your API call here
-    // Example:
-   
   try {
-    console.log('Submitting book1:', formData);
+  
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/books`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
     });
-    console.log('Fetch called');
-    console.log('Response status:', response.status);
+ 
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -70,7 +72,7 @@ function AddBookPage() {
     }
 
     const data = await response.json();
-    console.log("Book created:", data);
+
 
     alert('Book added successfully!');
 
@@ -86,7 +88,7 @@ function AddBookPage() {
     });
       window.location.href = '/book';
       } catch (error: any) {
-    console.error("Error adding book:", error);
+   
     alert(` Error: ${error.message}`);
   }
   };
@@ -114,7 +116,7 @@ function AddBookPage() {
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Add New Book</h1>
           <p className="text-gray-600">Fill in the details to add a book to your collection</p>
         </div>
-            {/* book_name Input */}
+  
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Title *
@@ -130,7 +132,7 @@ function AddBookPage() {
               />
             </div>
 
-            {/* Author Input */}
+        
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Author *
@@ -146,7 +148,7 @@ function AddBookPage() {
               />
             </div>
 
-            {/* Genre Input */}
+           
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                Book Description *
@@ -221,7 +223,7 @@ function AddBookPage() {
 
             </div>
 
-            {/* Buttons */}
+        
             <div className="flex gap-4 pt-4">
               <button
                 type="button"
@@ -240,8 +242,6 @@ function AddBookPage() {
             </div>
           </div>
         </div>
-
-        {/* Info Card */}
     
       </div>
   

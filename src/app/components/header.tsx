@@ -1,14 +1,19 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 
 function Header() {
+
+ 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+ 
 
   const handleLogout = () => {
     signOut();
-    console.log('Logging out...');
     alert('Logged out successfully!');
     window.location.href = '/auth/signin';
   };
@@ -27,7 +32,6 @@ function Header() {
     <header className="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo Section */}
           <div 
             onClick={handleHome}
             className="flex items-center space-x-3 cursor-pointer"
