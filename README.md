@@ -45,6 +45,8 @@ A full-stack **Book Catalog** application built with **Next.js**, **React**, **N
 6. **Logout**
    - Clicking logout clears the session and redirects user to the login page
 
+### Vercel Deployment link
+[View Live App on Vercel](https://book-catalog-app-scaylar-assessment-mocha.vercel.app/)
 
 
 ## Setup Instructions (Local Development)
