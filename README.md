@@ -72,7 +72,7 @@ npm install
   NEXTAUTH_SECRET="1/hhkr4xY2MotyV2hHILnZN6sogDQz+NSnwp5teaAJc="
   GOOGLE_CLIENT_ID="969864524820-jbsieu66rn3nq08gr28k1tjnd75c4uvh.apps.googleusercontent.com"
   GOOGLE_CLIENT_SECRET="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"
-  NEXT_PUBLIC_BASE_URL=http://localhost:3000
+  NEXT_PUBLIC_BASE_URL="http://localhost:3000"
   NODE_ENV="production"
 5. Run the development server
    ```bash
