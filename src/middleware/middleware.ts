@@ -9,9 +9,11 @@ export default function middleware(request: NextRequest) {
   const origin = request.headers.get('origin');
   
   // Define allowed origins dynamically
-  const allowedOrigins = process.env.NODE_ENV === 'production' 
-    ? ['https://app.example.com', 'https://admin.example.com']
-    : ['http://localhost:3000', 'http://localhost:3001'];
+    const allowedOrigins =
+    process.env.NODE_ENV === "production"
+    ? ["https://book-catalog-app-scaylar-assessment-cha4-cmxhwxy7v.vercel.app"] // change to your real domains
+    : ["http://localhost:3000", "http://localhost:3001"];
+
   
   const isAllowedOrigin = origin && allowedOrigins.includes(origin);
   
